@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>デジタルバーンアウト インフォグラフィック</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #f8fafc;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 350px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+                max-height: 400px;
+            }
+        }
+        .kpi-box {
+            background-color: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px_6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .kpi-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        .kpi-number {
+            font-size: 3rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+        .flow-item {
+            display: flex;
+            align-items: center;
+            background-color: #ffffff;
+            border-left: 5px solid;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <header class="bg-white shadow-md sticky top-0 z-10">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <h1 class="text-2xl md:text-3xl font-bold text-center" style="color: #00A6A6;">デジタルバーンアウトの実態</h1>
+            <p class="text-center text-gray-600 mt-1">現代社会が直面する新たな「燃え尽き症候群」をデータで読み解く</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+
+        <section id="introduction" class="mb-16 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">あなたも無関係ではないかもしれない</h2>
+            <p class="max-w-3xl mx-auto text-lg text-gray-700">デジタル技術の過剰な使用は、私たちの心と体に深刻な疲労をもたらします。これは「デジタルバーンアウト」と呼ばれ、常にオンラインであることが求められる現代社会特有の現象です。このインフォグラフィックでは、その実態と対策をデータと共に探ります。</p>
+        </section>
+
+        <section id="statistics" class="mb-16">
+            <h2 class="text-2xl md:text-3xl font-bold text-center mb-8">数字で見るデジタルバーンアウト</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+                <div class="kpi-box lg:col-span-1">
+                    <h3 class="font-bold text-xl mb-2" style="color: #F27405;">高い有病率</h3>
+                    <p class="kpi-number" style="color: #F24405;">20-30<span class="text-2xl">%</span></p>
+                    <p class="text-gray-600 mt-2">先進国の成人が何らかのデジタルバーンアウト状態にあると推定されています。</p>
+                </div>
+
+                <div class="kpi-box lg:col-span-1">
+                    <h3 class="font-bold text-xl mb-2" style="color: #F27405;">若年層でより深刻</h3>
+                     <p class="kpi-number" style="color: #D92B04;">~40<span class="text-2xl">%</span></p>
+                    <p class="text-gray-600 mt-2">都市部の大学生では、この割合が約40%に達するという調査結果も報告されています。</p>
+                </div>
+
+                <div class="kpi-box lg:col-span-1">
+                    <h3 class="font-bold text-xl mb-2" style="color: #F27405;">教育現場のストレス</h3>
+                    <p class="kpi-number" style="color: #F2A413;">71.3<span class="text-2xl">%</span></p>
+                    <p class="text-gray-600 mt-2">オンライン授業を経験した高校生・大学生が「通常と異なる学校生活」にストレスを感じたと回答。</p>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-md p-6 md:col-span-2 lg:col-span-3">
+                    <h3 class="text-xl font-bold text-center mb-4">パンデミックが加速させた燃え尽き</h3>
+                    <div class="chart-container h-64 md:h-80">
+                        <canvas id="pandemicImpactChart"></canvas>
+                    </div>
+                    <p class="text-center text-gray-600 mt-4">COVID-19禍でリモートワークが急増し、燃え尽き症状を訴える米国労働者の割合は、2020年3月から8月のわずか5ヶ月で15ポイントも増加しました。</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="symptoms" class="mb-16">
+            <h2 class="text-2xl md:text-3xl font-bold text-center mb-8">これは危険信号？主な症状</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="font-bold text-xl mb-4 flex items-center" style="color: #00A6A6;"><span class="text-3xl mr-3">🧠</span>精神的な症状</h3>
+                    <ul class="list-none space-y-3 text-gray-700">
+                        <li class="flex items-start"><span class="mr-2 mt-1" style="color: #00A6A6;">●</span>集中力、思考力、判断力の低下</li>
+                        <li class="flex items-start"><span class="mr-2 mt-1" style="color: #00A6A6;">●</span>イライラしやすく感情のコントロールが困難</li>
+                        <li class="flex items-start"><span class="mr-2 mt-1" style="color: #00A6A6;">●</span>常に落ち着かず、ストレスや不安を感じる</li>
+                        <li class="flex items-start"><span class="mr-2 mt-1" style="color: #00A6A6;">●</span>仕事や私生活への興味・意欲の喪失</li>
+                    </ul>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="font-bold text-xl mb-4 flex items-center" style="color: #F27405;"><span class="text-3xl mr-3">🤕</span>身体的な症状</h3>
+                    <ul class="list-none space-y-3 text-gray-700">
+                        <li class="flex items-start"><span class="mr-2 mt-1" style="color: #F27405;">●</span>十分休んでも回復しない慢性的な疲労感</li>
+                        <li class="flex items-start"><span class="mr-2 mt-1" style="color: #F27405;">●</span>寝つきが悪い、中途覚醒などの睡眠障害</li>
+                        <li class="flex items-start"><span class="mr-2 mt-1" style="color: #F27405;">●</span>原因のわかりにくい頭痛、目の疲れ、肩こり</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="solutions" class="mb-16">
+            <h2 class="text-2xl md:text-3xl font-bold text-center mb-8">デジタルバーンアウトへの処方箋</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div>
+                    <h3 class="text-xl font-bold mb-6 text-center">👤 個人でできるセルフケア</h3>
+                    <div class="space-y-4">
+                        <div class="flow-item" style="border-color: #00A6A6;">
+                            <span class="text-3xl mr-4">📵</span>
+                            <div>
+                                <h4 class="font-bold">デジタルデトックス</h4>
+                                <p class="text-sm text-gray-600">意識的にデバイスから離れ、「つながらない時間」を確保する。</p>
+                            </div>
+                        </div>
+                        <div class="flow-item" style="border-color: #F2A413;">
+                            <span class="text-3xl mr-4">⏳</span>
+                            <div>
+                                <h4 class="font-bold">時間制限と休憩</h4>
+                                <p class="text-sm text-gray-600">利用時間を管理し、1時間に一度は休憩を取る。</p>
+                            </div>
+                        </div>
+                        <div class="flow-item" style="border-color: #F27405;">
+                            <span class="text-3xl mr-4">🏡</span>
+                            <div>
+                                <h4 class="font-bold">オン・オフの境界作り</h4>
+                                <p class="text-sm text-gray-600">仕事とプライベートを切り替える儀式を設け、環境を整える。</p>
+                            </div>
+                        </div>
+                        <div class="flow-item" style="border-color: #D92B04;">
+                             <span class="text-3xl mr-4">🧘</span>
+                            <div>
+                                <h4 class="font-bold">心身の健康維持</h4>
+                                <p class="text-sm text-gray-600">睡眠・運動・栄養を基本に、対面の交流や趣味でリフレッシュする。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                 <div>
+                    <h3 class="text-xl font-bold mb-6 text-center">🏢 組織ができるサポート</h3>
+                     <div class="space-y-4">
+                        <div class="flow-item" style="border-color: #00A6A6;">
+                            <span class="text-3xl mr-4">🔕</span>
+                            <div>
+                                <h4 class="font-bold">「つながらない権利」の保障</h4>
+                                <p class="text-sm text-gray-600">勤務時間外の連絡を控えるルールを設け、休息を確保する。</p>
+                            </div>
+                        </div>
+                        <div class="flow-item" style="border-color: #F2A413;">
+                            <span class="text-3xl mr-4">📊</span>
+                            <div>
+                                <h4 class="font-bold">業務量の見直し</h4>
+                                <p class="text-sm text-gray-600">過度な負荷をなくし、働き方を最適化する。</p>
+                            </div>
+                        </div>
+                        <div class="flow-item" style="border-color: #F27405;">
+                             <span class="text-3xl mr-4">🎓</span>
+                            <div>
+                                <h4 class="font-bold">デジタルウェルビーイング研修</h4>
+                                <p class="text-sm text-gray-600">健康的なデジタル機器との付き合い方を教育し、支援する。</p>
+                            </div>
+                        </div>
+                        <div class="flow-item" style="border-color: #D92B04;">
+                            <span class="text-3xl mr-4">🤝</span>
+                            <div>
+                                <h4 class="font-bold">文化・風土の醸成</h4>
+                                <p class="text-sm text-gray-600">「休むことは悪ではない」という共通認識を育む。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="workplace-impact" class="mb-16">
+             <h2 class="text-2xl md:text-3xl font-bold text-center mb-8">職場での影響</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                 <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-bold text-center mb-4">デジタル過負荷の実態</h3>
+                    <div class="chart-container h-64 md:h-80">
+                        <canvas id="workplaceOverloadChart"></canvas>
+                    </div>
+                    <p class="text-center text-gray-600 mt-4">調査対象のオフィスワーカーのうち87%は1日平均7時間も画面を見ており、その半数以上がデジタル過負荷による疲労や抑うつを感じています。</p>
+                </div>
+                <div class="space-y-6">
+                    <div class="p-4 rounded-lg bg-red-50 border border-red-200">
+                        <h4 class="font-bold text-red-800">境界の曖昧化</h4>
+                        <p class="text-red-700">リモートワークでは仕事と私生活の境界が溶け、月平均232時間も「つながっている」状態になるケースも。これが心理的負荷を増大させます。</p>
+                    </div>
+                    <div class="p-4 rounded-lg bg-yellow-50 border border-yellow-200">
+                        <h4 class="font-bold text-yellow-800">監視ストレスと孤独感</h4>
+                        <p class="text-yellow-700">監視ツールによるプレッシャーや、同僚との交流減少による孤立が、精神的な疲弊を加速させます。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-800 text-white mt-16">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center">
+            <p>このインフォグラフィックは、提供された資料に基づき作成されました。</p>
+            <p class="text-sm text-gray-400 mt-1">健康的なデジタルライフを心がけましょう。</p>
+        </div>
+    </footer>
+    
+    <script>
+        const FONT_COLOR = '#374151'; 
+        const GRID_COLOR = '#e5e7eb';
+        const PALETTE = {
+            teal: '#00A6A6',
+            yellow: '#F2A413',
+            orange: '#F27405',
+            redOrange: '#F24405',
+            red: '#D92B04'
+        };
+
+        function wrapText(text, maxLength) {
+            if (typeof text !== 'string' || text.length <= maxLength) {
+                return text;
+            }
+            const words = text.split(' ');
+            const lines = [];
+            let currentLine = '';
+            for (const word of words) {
+                if ((currentLine + word).length > maxLength && currentLine.length > 0) {
+                    lines.push(currentLine.trim());
+                    currentLine = '';
+                }
+                currentLine += word + ' ';
+            }
+            lines.push(currentLine.trim());
+            return lines;
+        }
+
+        const tooltipTitleCallback = (tooltipItems) => {
+            const item = tooltipItems[0];
+            let label = item.chart.data.labels[item.dataIndex];
+            if (Array.isArray(label)) {
+                return label.join(' ');
+            }
+            return label;
+        };
+        
+        const commonChartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    labels: {
+                        color: FONT_COLOR,
+                        font: {
+                            size: 14
+                        }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        title: tooltipTitleCallback
+                    },
+                    backgroundColor: '#ffffff',
+                    titleColor: '#333333',
+                    bodyColor: '#666666',
+                    borderColor: '#dddddd',
+                    borderWidth: 1,
+                    padding: 10,
+                    displayColors: true,
+                    boxPadding: 4
+                }
+            },
+            scales: {
+                x: {
+                    ticks: {
+                        color: FONT_COLOR,
+                        font: {
+                            size: 12
+                        }
+                    },
+                    grid: {
+                        color: GRID_COLOR,
+                    }
+                },
+                y: {
+                     ticks: {
+                        color: FONT_COLOR,
+                        font: {
+                            size: 12
+                        }
+                    },
+                    grid: {
+                        color: GRID_COLOR,
+                    }
+                }
+            }
+        };
+
+        const pandemicImpactCtx = document.getElementById('pandemicImpactChart').getContext('2d');
+        new Chart(pandemicImpactCtx, {
+            type: 'line',
+            data: {
+                labels: ['2020年3月', '2020年8月'],
+                datasets: [{
+                    label: '燃え尽き症状を感じる労働者の割合 (%)',
+                    data: [43, 58],
+                    backgroundColor: 'rgba(217, 43, 4, 0.2)',
+                    borderColor: PALETTE.red,
+                    borderWidth: 3,
+                    pointBackgroundColor: PALETTE.red,
+                    pointRadius: 5,
+                    tension: 0.1
+                }]
+            },
+            options: {
+                ...commonChartOptions,
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        min: 40,
+                        max: 60,
+                        ticks: {
+                            color: FONT_COLOR,
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        },
+                         grid: { color: GRID_COLOR }
+                    },
+                    x: {
+                        ticks: { color: FONT_COLOR },
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+
+        const workplaceOverloadCtx = document.getElementById('workplaceOverloadChart').getContext('2d');
+        new Chart(workplaceOverloadCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['デジタル過負荷による疲労を感じる', '感じていない'],
+                datasets: [{
+                    label: 'オフィスワーカーの状態',
+                    data: [58, 42],
+                    backgroundColor: [
+                        PALETTE.orange,
+                        '#e5e7eb'
+                    ],
+                    borderColor: [
+                        PALETTE.orange,
+                        '#e5e7eb'
+                    ],
+                    borderWidth: 1,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                 plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: FONT_COLOR,
+                            font: { size: 12 },
+                            boxWidth: 20,
+                            padding: 20
+                        }
+                    },
+                    tooltip: {
+                         callbacks: {
+                            title: tooltipTitleCallback,
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed !== null) {
+                                    label += context.parsed + '%';
+                                }
+                                return label;
+                            }
+                        },
+                        backgroundColor: '#ffffff',
+                        titleColor: '#333333',
+                        bodyColor: '#666666',
+                        borderColor: '#dddddd',
+                        borderWidth: 1
+                    },
+                    title: {
+                        display: true,
+                        text: '長時間画面を見る労働者のうち',
+                        padding: {
+                            bottom: 10
+                        },
+                        font: {
+                            size: 14,
+                            weight: 'normal'
+                        },
+                        color: FONT_COLOR
+                    }
+                },
+                cutout: '60%'
+            }
+        });
+    </script>
+
+</body>
+</html>
